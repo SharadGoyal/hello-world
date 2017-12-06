@@ -1,0 +1,31 @@
+// Check Jailbreak Device
+
+if isDeviceJailBreak() {
+            print("Device is jailbreak")
+        }
+
+extension AppDelegate {
+    func isDeviceJailBreak() -> Bool {
+        if TARGET_IPHONE_SIMULATOR != 0
+        {
+            let fileManager = FileManager.default
+            
+            // Check 1 : existence of files that are common for jailbroken devices
+            if fileManager.fileExists(atPath: "/Applications/Cydia.app") || fileManager.fileExists(atPath: "/Library/MobileSubstrate/MobileSubstrate.dylib") || fileManager.fileExists(atPath: "/bin/bash") || fileManager.fileExists(atPath: "/usr/sbin/sshd") || fileManager.fileExists(atPath: "/etc/apt") || fileManager.fileExists(atPath: "/private/var/lib/apt/") || UIApplication.shared.canOpenURL(URL(string: "cydia://package/com.example.package")!) {
+                return true
+            }
+            
+            // Check 2 : Reading and writing in system directories (sandbox violation)
+            let stringToWrite = "Jailbreak Test"
+            do {
+                try stringToWrite.write(toFile:"/private/JailbreakTest.txt", atomically:true, encoding:String.Encoding.utf8)
+                //Device is jailbroken
+                return true
+            } catch {
+                return false
+            }
+        } else {
+            return false
+        }
+    }
+}
