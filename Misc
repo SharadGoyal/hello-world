@@ -1,0 +1,89 @@
+import UIKit
+import WebKit
+
+class ViewController: UIViewController {
+
+    @IBOutlet weak var wkWebView: WKWebView!
+    
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+//        initializeWebView()
+        checkPalindrome()
+        checkMyClass()
+        // Do any additional setup after loading the view, typically from a nib.
+        
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+    private func checkMyClass() {
+        let obj1 = MyClass(name: "abc", age: 12)
+        let obj2 = MyClass(name: "xyz", age: 12)
+        
+        print(obj1 < obj2)
+        print(obj1 == obj2)
+    }
+    
+    private func checkPalindrome() {
+        let str: String! = "abc"
+        let count: Int = str.count
+        for i in 0..<str.count {
+            if str.subString(i: i) != str.subString(i: (count - i - 1)) {
+                print("String is not palindrome...")
+                break
+            }
+        }
+    }
+    
+    private func initializeWebView() {
+        wkWebView?.addObserver(self, forKeyPath: "title", options: .new, context: nil)
+        wkWebView?.load(URLRequest.init(url: URL.init(string: "http://staging.innovationm.com/ielts_testing/content/speaking/speaking_assesment_criteria.html")!))
+    }
+    
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if keyPath == "title" {
+            navigationItem.title = wkWebView.title
+        }
+    }
+
+}
+
+extension String {
+    
+    subscript (i: Int) -> Character {
+        return self[index(startIndex, offsetBy: i)]
+    }
+    
+    func subString (i: Int) -> String {
+        return String(self[i] as Character)
+    }
+    
+}
+
+
+
+class MyClass: Comparable, Hashable {
+    var hashValue: Int {
+        return name.hashValue + age.hashValue
+    }
+    
+    static func <(lhs: MyClass, rhs: MyClass) -> Bool {
+        return lhs.name < rhs.name
+    }
+    
+    static func ==(lhs: MyClass, rhs: MyClass) -> Bool {
+        return lhs.name == rhs.name && lhs.age == rhs.age
+    }
+    
+    var name: String
+    var age: Int
+    
+    init(name: String, age: Int) {
+        self.name = name
+        self.age = age
+    }
+}
