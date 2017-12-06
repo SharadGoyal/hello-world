@@ -1,3 +1,9 @@
+// get random number less than 9999
+let num = arc4random_uniform(9999)
+        print("Number => \(num)")
+        
+        converNumberIntoString(num)
+
 // Convert number into String for Dial Pad verification
 private func converNumberIntoString(_ number: UInt32) {
         
@@ -15,4 +21,34 @@ private func converNumberIntoString(_ number: UInt32) {
         
         let str = digits.joined(separator: ",")
         print("String is => \(str)")
+    }
+
+// Find simultaneous touch on two buttons
+
+var Button_1_Pressed: Int = 0
+var Button_2_Pressed: Int = 0
+
+@IBAction func btn_1_up(_ sender: UIButton) {
+        if (Button_1_Pressed == 1 && Button_2_Pressed == 1) {
+            print("1- Both Pressed at same time")
+        }
+        preparePopover(sender: sender)
+        Button_1_Pressed = 0
+    }
+    
+    @IBAction func btn_2_up(_ sender: UIButton) {
+        if (Button_1_Pressed == 1 && Button_2_Pressed == 1) {
+            print("2- Both Pressed at same time")
+        }
+        Button_2_Pressed = 0
+    }
+    
+    @IBAction func btn_1_down(_ sender: UIButton) {
+        Button_1_Pressed = 1
+        print("Only Button 1 Pressed")
+    }
+    
+    @IBAction func btn_2_down(_ sender: UIButton) {
+        Button_2_Pressed = 1
+        print("Only Button 2 Pressed")
     }
