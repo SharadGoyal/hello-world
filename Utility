@@ -1,0 +1,18 @@
+// Convert number into String for Dial Pad verification
+private func converNumberIntoString(_ number: UInt32) {
+        
+        let numberFormatter = NumberFormatter.init()
+        numberFormatter.locale = Locale.current
+        numberFormatter.numberStyle = .spellOut
+        
+        let digits = String(number).characters.flatMap {
+            if let number = Int(String($0)) {
+                return numberFormatter.string(from: NSNumber.init(integerLiteral: number))
+            }
+            return "0"
+
+        }
+        
+        let str = digits.joined(separator: ",")
+        print("String is => \(str)")
+    }
