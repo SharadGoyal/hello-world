@@ -1,0 +1,74 @@
+/// set text on UILabel
+private func setTextOnTermsLabel() {
+        labelTerms.text = "I have read and agree to the terms of use and privacy notice"
+        
+        let text = labelTerms.text
+        guard let labelText = text else {
+            return
+        }
+        let underlinedAttributedString = NSMutableAttributedString(string: labelText)
+        let range1 = (labelText as NSString).range(of: "terms of use")
+       
+        let attributes: [String: Any] = [NSUnderlineStyleAttributeName: NSUnderlineStyle.styleSingle.rawValue, NSForegroundColorAttributeName: UIColor.getColor(colorType: .appStyleSystemButton)]
+        
+        underlinedAttributedString.addAttributes(attributes, range: range1)
+        let range2 = (labelText as NSString).range(of: "privacy notice")
+        underlinedAttributedString.addAttributes(attributes, range: range2)
+        labelTerms.attributedText = underlinedAttributedString
+    }
+
+
+//MARK: IB ACTION METHODS OF UIBUTTONS
+// for this add tap gesture on UILabel in storyboard and check userInteractionEnabled and connect IBAction
+    @IBAction func clickedLabelTerms(_ sender: UITapGestureRecognizer) {
+        guard  let text = labelTerms.text else {
+            return
+        }
+        
+        let termsRange = (text as NSString).range(of: strTermsOfUse)
+        let privacyRange = (text as NSString).range(of: strPrivacyPolicy)
+        
+        if sender.didTapAttributedTextInLabel(label: labelTerms, inRange: termsRange) {
+                clickedButtonTAndC()
+        } else if sender.didTapAttributedTextInLabel(label: labelTerms, inRange: privacyRange) {
+                clickedButtonPrivacyPolicy()
+        } else {
+            
+        }
+    }
+
+
+/// Extension UITapGestureRecognizer to find touch area
+extension UITapGestureRecognizer {
+    func didTapAttributedTextInLabel(label: UILabel, inRange targetRange: NSRange) -> Bool {
+        // create instances of NSLayoutManager, NSTextContainer and NSTextStorage
+        let layoutManager = NSLayoutManager()
+        let textContainer = NSTextContainer(size: CGSize.zero)
+        guard let attributedText = label.attributedText else {
+            return false
+        }
+        let textStorage = NSTextStorage(attributedString: attributedText)
+        // configure layoutManager and textStorage
+        layoutManager.addTextContainer(textContainer)
+        textStorage.addLayoutManager(layoutManager)
+        
+        // cofigure textContainer
+        textContainer.lineFragmentPadding = 0.0
+        textContainer.lineBreakMode = label.lineBreakMode
+        textContainer.maximumNumberOfLines = label.numberOfLines
+        let labelSize = label.bounds.size
+        textContainer.size = labelSize
+        
+        // find the tapped character location and compare it to the specified range
+        let locationOfTouchInLabel = self.location(in: label)
+        let textBoundingBox = layoutManager.usedRect(for: textContainer)
+        let textContainerOffset = CGPoint.init(x: (labelSize.width - textBoundingBox.size.width) * 0.5 - textBoundingBox.origin.x, y: (labelSize.height - textBoundingBox.size.height) * 0.5 - textBoundingBox.origin.y)
+        
+        let locationOfTouchInTextContainer = CGPoint.init(x: locationOfTouchInLabel.x - textContainerOffset.x, y: locationOfTouchInLabel.y - textContainerOffset.y)
+        
+        let indexOfCharacter = layoutManager.characterIndex(for: locationOfTouchInTextContainer, in: textContainer, fractionOfDistanceBetweenInsertionPoints: nil)
+        
+        return NSLocationInRange(indexOfCharacter, targetRange)
+        
+    }
+}
