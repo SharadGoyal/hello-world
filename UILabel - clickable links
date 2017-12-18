@@ -9,7 +9,7 @@ private func setTextOnTermsLabel() {
         let underlinedAttributedString = NSMutableAttributedString(string: labelText)
         let range1 = (labelText as NSString).range(of: "terms of use")
        
-        let attributes: [String: Any] = [NSUnderlineStyleAttributeName: NSUnderlineStyle.styleSingle.rawValue, NSForegroundColorAttributeName: UIColor.getColor(colorType: .appStyleSystemButton)]
+        let attributes: [String: Any] = [NSUnderlineStyleAttributeName: NSUnderlineStyle.styleSingle.rawValue, NSForegroundColorAttributeName: UIColor.blue]
         
         underlinedAttributedString.addAttributes(attributes, range: range1)
         let range2 = (labelText as NSString).range(of: "privacy notice")
