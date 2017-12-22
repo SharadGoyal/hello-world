@@ -1,0 +1,99 @@
+// find second greatest element in array
+private func findSecondGreatest() {
+        var first = 0
+        var second = 0
+        
+        for i in 0..<arr.count {
+            if arr[i] > first {
+                second = first
+                first = arr[i]
+            } else if (arr[i] > second && arr[i] != first) {
+                second = arr[i]
+            }
+        }
+        print("Second greatest : \(second)")
+    }
+    
+    // find least greatest from first element in array
+    private func findLeastGreatest() {
+        var leastGreatest = 99999
+        var temp = 0
+        for i in 1..<arr.count {
+            if arr[i] > arr[0] {
+                temp = arr[i]
+                if temp < leastGreatest {
+                    leastGreatest = temp
+                }
+            }
+        }
+        print("Least Greatest : \(leastGreatest)")
+    }
+    
+    
+    // sort array for first index
+    private func sortForFirstIndex() {
+        var i: Int = 1
+        for j in i..<arr.count {
+            if arr[j] == arr[0] {
+                swap(index1: i, index2: j)
+                i = i + 1
+            }
+        }
+        print(arr)
+    }
+    
+    // selection sort
+    private func sortArray() {
+        var min: Int
+        for i in 0..<arr.count {
+            min = i
+            for j in i + 1..<arr.count {
+                if arr[j] < arr[min] {
+                    min = j
+                }
+            }
+            swap(index1: i, index2: min)
+        }
+        print(arr)
+    }
+    
+    private func swap(index1: Int, index2: Int) {
+        let temp = arr[index1]
+        arr[index1] = arr[index2]
+        arr[index2] = temp
+    }
+    
+    // array left rotation
+    private func leftShiftArray() {
+        let d = 2
+        for _ in 0..<d {
+            leftRotateByOne()
+        }
+        print(arr)
+    }
+    
+    private func leftRotateByOne() {
+        let temp = arr[0]
+        for i in 0..<arr.count - 1 {
+            arr[i] = arr[i + 1]
+        }
+        arr[arr.count - 1] = temp
+    }
+    
+    
+    // Find Longest Common Subsequence
+    private func findLCS(_ array1: [String], _ array2: [String], _ m: Int, _ n: Int) -> Int {
+        if (m == 0 || n == 0) {
+            return 0
+        }
+        if (array1[m-1] == array2[n-1]) {
+            return 1 + findLCS(array1, array2, m - 1, n - 1)
+        }
+        else {
+            return max(findLCS(array1, array2, m, n - 1), findLCS(array1, array2, m - 1, n))
+        }
+    }
+    
+    private func max(_ a: Int, _ b: Int) -> Int {
+        return a > b ? a : b
+    }
