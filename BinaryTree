@@ -1,0 +1,123 @@
+class ViewController: UIViewController {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        createBinaryTree()
+        
+    }
+    
+    private func createBinaryTree() {
+        var tree: BinaryTree<Int> = BinaryTree<Int>.empty
+        tree.newNodeInsert(newValue: 4)
+        tree.newNodeInsert(newValue: 6)
+        tree.newNodeInsert(newValue: 3)
+        print(tree)
+        
+        tree.traversePostOrder { (value) in
+            print(value)
+        }
+        
+        let searchTree = tree.searchNode(searchValue: 6)
+        print(searchTree ?? "not found")
+    }
+}
+
+class Node<T> {
+    var value: T
+    var leftChild: Node?
+    var rightChild: Node?
+    
+    init(value: T) {
+        self.value = value
+    }
+}
+
+enum BinaryTree<T: Comparable> {
+    case empty
+    indirect case node(BinaryTree, T, BinaryTree)
+}
+
+extension BinaryTree: CustomStringConvertible {
+    var description: String {
+        switch self {
+        case .empty:
+            return ""
+        case let .node(left, value, right):
+            return "Value: \(value)" + "[left: \(left.description)]" + "[right: \(right.description)]"
+        }
+    }
+    
+    var count: Int {
+        switch self {
+        case .empty:
+            return 0
+        case let .node(left, _, right):
+            return left.count + 1 + right.count
+        }
+    }
+    
+    mutating func newNodeInsert(newValue: T) {
+        self = naiveInsert(newValue: newValue)
+    }
+    
+    private func naiveInsert(newValue: T) -> BinaryTree {
+        switch self {
+        case .empty:
+            return .node(.empty, newValue, .empty)
+        case let .node(left, value, right):
+            if newValue > value {
+                return .node(left, value, right.naiveInsert(newValue: newValue))
+            } else {
+                return .node(left.naiveInsert(newValue: newValue), value, right)
+            }
+        }
+    }
+    
+    func traverseInOrder(process: ((T) -> Void)) {
+        switch self {
+        case .empty:
+            return
+        case let .node(left, value, right):
+            left.traverseInOrder(process: process)
+            process(value)
+            right.traverseInOrder(process: process)
+        }
+    }
+    
+    func traversePreOrder(process: ((T) -> Void)) {
+        switch self {
+        case .empty:
+            return
+        case let .node(left, value, right):
+            process(value)
+            left.traverseInOrder(process: process)
+            right.traverseInOrder(process: process)
+        }
+    }
+    
+    func traversePostOrder(process: ((T) -> Void)) {
+        switch self {
+        case .empty:
+            return
+        case let .node(left, value, right):
+            left.traverseInOrder(process: process)
+            right.traverseInOrder(process: process)
+            process(value)
+        }
+    }
+    
+    func searchNode(searchValue: T) -> BinaryTree? {
+        switch self {
+        case .empty:
+            return nil
+        case let .node(left, value, right):
+            if searchValue == value {
+                return self
+            } else if searchValue < value {
+                return left.searchNode(searchValue: searchValue)
+            } else {
+                return right.searchNode(searchValue: searchValue)
+            }
+        }
+    }
+}
