@@ -97,3 +97,23 @@ private func findSecondGreatest() {
     private func max(_ a: Int, _ b: Int) -> Int {
         return a > b ? a : b
     }
+    
+    // BitCoin Problem, need to purchase at min rate and sale at max rate
+    private func findMinMax() {
+        var min: Int = 0
+        var max: Int = 0
+        
+        for i in 1..<arr.count {
+            if arr[min] > arr[i] {
+                min = i
+            }
+            if max >= min {
+                if arr[max] < arr[i] {
+                    max = i
+                }
+            } else {
+                max = min
+            }
+        }
+        print("min => \(min), max => \(max)")
+    }
