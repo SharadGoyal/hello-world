@@ -1,0 +1,13 @@
+private func createPDF() {
+        let pdfData = NSMutableData()
+        UIGraphicsBeginPDFContextToData(pdfData, view.bounds, nil)
+        UIGraphicsBeginPDFPage()
+        let pdfContext = UIGraphicsGetCurrentContext()
+        view.layer.render(in: pdfContext!)
+        UIGraphicsEndPDFContext()
+        
+        let documentDirectories = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+        let fileName = documentDirectories.appendingPathComponent("abc")
+        pdfData.write(to: fileName, atomically: true)
+        
+    }
