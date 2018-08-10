@@ -10,10 +10,9 @@ import Foundation
 import UIKit
 
 class SpeedometerView: UIView {
-    
-    @IBInspectable var firstColor: UIColor = UIColor.red
-    @IBInspectable var secondColor: UIColor = UIColor.green
-    @IBInspectable var thirdColor: UIColor = UIColor.blue
+    @IBInspectable var firstColor: UIColor = UIColor(red: 0/255.0, green: 146/255.0, blue: 69/255.0, alpha: 1.0)
+    @IBInspectable var secondColor: UIColor = UIColor(red: 239/255.0, green: 175/255.0, blue: 17/255.0, alpha: 1.0)
+    @IBInspectable var thirdColor: UIColor = UIColor(red: 219/255.0, green: 11/255.0, blue: 11/255.0, alpha: 1.0)
     
     @IBInspectable public var needleColor: UIColor = UIColor(red: 18/255.0, green: 112/255.0, blue: 178/255.0, alpha: 1.0)
     
